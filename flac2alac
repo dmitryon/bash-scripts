@@ -1,0 +1,12 @@
+#!/bin/bash
+STARTDIR=${1-`pwd`}
+
+
+function ffmpeg_convert() {
+    f="${1-$0}"
+    ffmpeg -i "$f" -acodec alac "${f%.flac}.m4a"
+}
+
+export -f ffmpeg_convert
+
+find "$STARTDIR" -name "*.flac" -print0 | xargs -0 -P 4 -n 1 bash -c ffmpeg_convert
